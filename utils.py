@@ -12,11 +12,14 @@ import os
 import math
 from enum import Enum
 from qgis.PyQt import uic
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, QDateTime
 from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsSettings, QgsApplication
+from qgis.gui import QgsDateTimeEdit
 from qgis.PyQt.QtWidgets import QDialog
 from datetime import date
 from shutil import copyfile
+from processing.gui.wrappers import WidgetWrapper
+
 try:
     from jplephem.spk import SPK
     from skyfield.api import load, load_file, wgs84
@@ -41,6 +44,33 @@ class SolarObj(Enum):
     NAUTICAL_TWILIGHT = 13
     ASTRONOMICAL_TWILIGHT = 14
     NIGHT = 15
+
+def zeroMsec(dt):
+    t = dt.time()
+    t.setHMS(t.hour(), t.minute(), t.second(), 0)
+    dt.setTime(t)
+
+class DateTimeWidget(WidgetWrapper):
+
+    def createWidget(self):
+        
+        self._combo = QgsDateTimeEdit()
+        self._combo.setCalendarPopup(True)
+       
+        self._combo.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
+
+        dt = QDateTime.currentDateTime()
+        zeroMsec(dt)
+        self._combo.setDateTime(dt)
+
+        return self._combo
+
+    def setValue(self, value):
+        self._combo.setDateTime(value)
+
+    def value(self):
+        date_chosen = self._combo.dateTime()
+        return date_chosen.toString(Qt.ISODate)
 
 def parse_timeseries(increment, duration):
     """
