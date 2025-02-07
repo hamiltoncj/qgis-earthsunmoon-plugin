@@ -29,7 +29,7 @@ from qgis.core import (
 
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtCore import QVariant, QUrl, QDateTime
-from .utils import epsg4326, settings, SolarObj, parse_timeseries
+from .utils import epsg4326, settings, SolarObj, parse_timeseries, zeroMsec, DateTimeWidget
 
 class SunPositionAlgorithm(QgsProcessingAlgorithm):
     """
@@ -46,7 +46,7 @@ class SunPositionAlgorithm(QgsProcessingAlgorithm):
     def initAlgorithm(self, config):
 
         dt = QDateTime.currentDateTime()
-        self.addParameter(
+        '''self.addParameter(
             QgsProcessingParameterDateTime(
                 self.PrmDateTime,
                 'Select date and time for calculations',
@@ -54,7 +54,15 @@ class SunPositionAlgorithm(QgsProcessingAlgorithm):
                 defaultValue=dt,
                 optional=False,
                 )
-        )
+        )'''
+        param = QgsProcessingParameterDateTime(
+            self.PrmDateTime,
+            'Select date and time for calculations',
+            defaultValue=dt,
+            optional=False,
+            )
+        param.setMetadata({'widget_wrapper': {"class": DateTimeWidget}})
+        self.addParameter(param)
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmStyle,

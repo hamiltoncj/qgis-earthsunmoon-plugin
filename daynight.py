@@ -29,7 +29,7 @@ from qgis.core import (
 
 from qgis.PyQt.QtGui import QIcon, QColor
 from qgis.PyQt.QtCore import QVariant, QUrl, QDateTime, Qt
-from .utils import epsg4326, SolarObj, parse_timeseries
+from .utils import epsg4326, SolarObj, parse_timeseries, zeroMsec, DateTimeWidget
 
 class DayNightAlgorithm(QgsProcessingAlgorithm):
     """
@@ -57,7 +57,8 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
     def initAlgorithm(self, config):
 
         dt = QDateTime.currentDateTime()
-        self.addParameter(
+        zeroMsec(dt)
+        '''self.addParameter(
             QgsProcessingParameterDateTime(
                 self.PrmDateTime,
                 'Set date and time',
@@ -65,7 +66,15 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
                 defaultValue=dt,
                 optional=False,
                 )
-        )
+        )'''
+        param = QgsProcessingParameterString(
+            self.PrmDateTime,
+            'Set date and time',
+            defaultValue=dt,
+            optional=False,
+            )
+        param.setMetadata({'widget_wrapper': {"class": DateTimeWidget}})
+        self.addParameter(param)
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmShowSun,

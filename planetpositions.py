@@ -23,13 +23,14 @@ from qgis.core import (
     QgsProcessingAlgorithm,
     QgsProcessingException,
     QgsProcessingParameterBoolean,
+    QgsProcessingParameterString,
     QgsProcessingLayerPostProcessorInterface,
     QgsProcessingParameterDateTime,
     QgsProcessingParameterFeatureSink)
 
 from qgis.PyQt.QtGui import QIcon, QColor
 from qgis.PyQt.QtCore import QVariant, QUrl, QDateTime
-from .utils import epsg4326, settings, SolarObj
+from .utils import epsg4326, settings, SolarObj, zeroMsec, DateTimeWidget
 
 class PlanetPositionsAlgorithm(QgsProcessingAlgorithm):
     """
@@ -42,16 +43,25 @@ class PlanetPositionsAlgorithm(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config):
 
-        qdt = QDateTime.currentDateTime()
-        self.addParameter(
+        dt = QDateTime.currentDateTime()
+        zeroMsec(dt)
+        """self.addParameter(
             QgsProcessingParameterDateTime(
                 self.PrmDateTime,
                 'Select date and time for calculations',
                 type=QgsProcessingParameterDateTime.DateTime,
-                defaultValue=qdt,
+                defaultValue=dt,
                 optional=False,
                 )
-        )
+        )"""
+        param = QgsProcessingParameterString(
+            self.PrmDateTime,
+            'Select date and time for calculations',
+            defaultValue=dt,
+            optional=False,
+            )
+        param.setMetadata({'widget_wrapper': {"class": DateTimeWidget}})
+        self.addParameter(param)
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmStyle,
