@@ -70,7 +70,7 @@ class DateTimeWidget(WidgetWrapper):
 
     def value(self):
         date_chosen = self._combo.dateTime()
-        return date_chosen.toString(Qt.ISODate)
+        return date_chosen.toString(Qt.DateFormat.ISODate)
 
 def parse_timeseries(increment, duration):
     """
@@ -227,7 +227,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     def updateEphemComboBox(self):
         self.ephemComboBox.clear()
         self.ephemComboBox.addItems(settings.allEphemFiles())
-        index = self.ephemComboBox.findText(settings.ephemFile(), Qt.MatchExactly)
+        index = self.ephemComboBox.findText(settings.ephemFile(), Qt.MatchFlag.MatchExactly)
         if index != -1:
             self.ephemComboBox.setCurrentIndex(index)
         
@@ -241,16 +241,16 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if not ephem_file:
             return
         if not os.path.isfile(ephem_file):
-            self.iface.messageBar().pushMessage("", "Not a valid file", level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", "Not a valid file", level=Qgis.MessageLevel.Warning, duration=4)
             return
         basename = os.path.basename(ephem_file)
         newpath = os.path.join(settings.ephemDir(), basename)
         if os.path.isfile(newpath):
-            self.iface.messageBar().pushMessage("", "This ephemeris file already exists", level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", "This ephemeris file already exists", level=Qgis.MessageLevel.Warning, duration=4)
             return
         copyfile(ephem_file, newpath)
         self.updateEphemComboBox()
-        index = self.ephemComboBox.findText(basename, Qt.MatchExactly)
+        index = self.ephemComboBox.findText(basename, Qt.MatchFlag.MatchExactly)
         if index != -1:
             self.ephemComboBox.setCurrentIndex(index)
         

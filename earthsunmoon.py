@@ -182,7 +182,7 @@ class EarthSunMoon(object):
             from .infoDialog import SolarInfoDialog
             self.solarInfoDialog = SolarInfoDialog(self.iface, self.iface.mainWindow())
             # self.solarInfoDialog.setFloating(True)
-            self.iface.addDockWidget(Qt.RightDockWidgetArea, self.solarInfoDialog)
+            self.iface.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.solarInfoDialog)
         self.solarInfoDialog.show()
 
     def ephemInfo(self):

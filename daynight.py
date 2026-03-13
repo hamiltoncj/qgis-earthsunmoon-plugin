@@ -121,7 +121,7 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDelta,
                 'Delta/resoution of polygon (in degrees)',
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=1,
                 minValue=0.001,
                 maxValue = 10.0,
@@ -154,7 +154,7 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
                 'Create sun time series',
                 False,
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
 
         param = QgsProcessingParameterString(
@@ -162,14 +162,14 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
                 'Time increment between observations (DD:HH:MM:SS)',
                 defaultValue='00:01:00:00',
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterString(
                 self.PrmTimeDuration,
                 'Total duration for sun positions (DD:HH:MM:SS)',
                 defaultValue='1:00:00:00',
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
 
         self.addParameter(
@@ -233,15 +233,15 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
         if show_sun:  # Sun position will be displayed
             (sink_sun, dest_id_sun) = self.parameterAsSink(
                 parameters, self.PrmSunOutput, context, f,
-                QgsWkbTypes.Point, epsg4326)
+                QgsWkbTypes.Type.Point, epsg4326)
         if day_night_line:  # Day, night terminator like will be displayed
             (sink_line, dest_id_line) = self.parameterAsSink(
                 parameters, self.PrmOutputLine, context, f,
-                QgsWkbTypes.LineString, epsg4326)
+                QgsWkbTypes.Type.LineString, epsg4326)
         if has_polygons:  # Twilight polygons will be displayed
             (sink, dest_id) = self.parameterAsSink(
                 parameters, self.PrmOutputPolygons, context, f,
-                QgsWkbTypes.MultiPolygon, epsg4326)
+                QgsWkbTypes.Type.MultiPolygon, epsg4326)
 
         project_crs = QgsProject.instance().crs()
         if clip_to_crs and project_crs != epsg4326:
@@ -384,7 +384,7 @@ class DayNightAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return DayNightAlgorithm()
@@ -398,7 +398,7 @@ class StylePostProcessor(QgsProcessingLayerPostProcessorInterface):
         symbol = layer.renderer().symbol()
         symbol.setColor(QColor(0,0,0,60))
         symbol_layer = symbol.symbolLayer(0)
-        symbol_layer.setStrokeStyle(Qt.NoPen)
+        symbol_layer.setStrokeStyle(Qt.PenStyle.NoPen)
             
 
     @staticmethod

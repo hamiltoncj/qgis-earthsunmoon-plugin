@@ -92,7 +92,7 @@ class PlanetPositionsAlgorithm(QgsProcessingAlgorithm):
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmOutputLayer, context, f,
-            QgsWkbTypes.Point, epsg4326)
+            QgsWkbTypes.Type.Point, epsg4326)
         
         eph = load(settings.ephemPath())
         earth = eph['earth'] # vector from solar system barycenter to geocenter

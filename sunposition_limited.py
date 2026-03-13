@@ -76,7 +76,7 @@ class SunPositionAlgorithm(QgsProcessingAlgorithm):
                 'Create sun time series',
                 False,
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
 
         param = QgsProcessingParameterString(
@@ -84,14 +84,14 @@ class SunPositionAlgorithm(QgsProcessingAlgorithm):
                 'Time increment between observations (DD:HH:MM:SS)',
                 defaultValue='00:01:00:00',
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterString(
                 self.PrmTimeDuration,
                 'Total duration for sun positions (DD:HH:MM:SS)',
                 defaultValue='1:00:00:00',
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         self.addParameter(
             QgsProcessingParameterFeatureSink(
@@ -124,7 +124,7 @@ class SunPositionAlgorithm(QgsProcessingAlgorithm):
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmOutputLayer, context, f,
-            QgsWkbTypes.Point, epsg4326)
+            QgsWkbTypes.Type.Point, epsg4326)
 
         qutc = qdt.toUTC()
         utc = qutc.toPyDateTime()

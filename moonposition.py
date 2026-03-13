@@ -75,7 +75,7 @@ class MoonPositionAlgorithm(QgsProcessingAlgorithm):
                 'Create moon time series',
                 False,
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
 
         param = QgsProcessingParameterString(
@@ -83,14 +83,14 @@ class MoonPositionAlgorithm(QgsProcessingAlgorithm):
                 'Time increment between observations (DD:HH:MM:SS)',
                 defaultValue='00:01:00:00',
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterString(
                 self.PrmTimeDuration,
                 'Total duration for moon positions (DD:HH:MM:SS)',
                 defaultValue='1:00:00:00',
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         self.addParameter(
             QgsProcessingParameterFeatureSink(
@@ -124,7 +124,7 @@ class MoonPositionAlgorithm(QgsProcessingAlgorithm):
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmOutputLayer, context, f,
-            QgsWkbTypes.Point, epsg4326)
+            QgsWkbTypes.Type.Point, epsg4326)
 
         qutc = qdt.toUTC()
         utc = qutc.toPyDateTime()
@@ -169,7 +169,7 @@ class MoonPositionAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return MoonPositionAlgorithm()

@@ -47,7 +47,7 @@ class SolarInfoDialog(QDockWidget, FORM_CLASS):
         self.rubber = QgsRubberBand(self.canvas)
         self.rubber.setColor(QColor(255, 70, 0, 200))
         self.rubber.setWidth(3)
-        self.rubber.setBrushStyle(Qt.NoBrush)
+        self.rubber.setBrushStyle(Qt.BrushStyle.NoBrush)
 
         # Set up a connection with the coordinate capture tool
         self.captureCoordinate = CaptureCoordinate(self.canvas)
@@ -222,7 +222,7 @@ class SolarInfoDialog(QDockWidget, FORM_CLASS):
                     self.autumnalEquinoxLabel.setText(self.formatDateTime(t[0]))
                     self.winterSolsticeLabel.setText(self.formatDateTime(t[1]))
         except Exception:
-            self.iface.messageBar().pushMessage("", "The ephemeris file does not cover the selected date range. Go to Settings and download and select an ephemeris file that contains your date range.", level=Qgis.Critical, duration=6)
+            self.iface.messageBar().pushMessage("", "The ephemeris file does not cover the selected date range. Go to Settings and download and select an ephemeris file that contains your date range.", level=Qgis.MessageLevel.Critical, duration=6)
                 
             
     def clearInfo(self):
@@ -327,5 +327,5 @@ class SolarInfoDialog(QDockWidget, FORM_CLASS):
             self.updateSunInfo()
         except Exception:
             self.clearInfo()
-            self.iface.messageBar().pushMessage("", "Invalid 'latitude, longitude'", level=Qgis.Warning, duration=2)
+            self.iface.messageBar().pushMessage("", "Invalid 'latitude, longitude'", level=Qgis.MessageLevel.Warning, duration=2)
             return
